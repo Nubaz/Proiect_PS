@@ -127,6 +127,11 @@ ui <- fluidPage(
         tabPanel("Repartiție", plotOutput("frep"))
       )
     )
+  ),
+  
+  mainPanel(
+    htmlOutput("text"),
+    width = "auto"
   )
 )
 
@@ -143,6 +148,7 @@ server <- function(input, output, session) {
     shinyjs::reset("val_pois")
   })
   
+  # Elemente caracteristice repartitiilor
   output$data <- renderUI({
     switch(input$rep,
            "Normală" = {
@@ -406,6 +412,36 @@ server <- function(input, output, session) {
              plot(X_pois,ppois(X_pois,pois_lambda),col="red",xlab="X",ylab="Probabilitate")
              grid(nx=20,ny=20)
            })
+  })
+  
+  # Descrierile repartitiilor
+  output$text <- renderUI({
+    switch(input$rep,
+        "Normală" = {
+          withMathJax(HTML(readLines("descrieri/normala.html", warn = F, encoding = 'UTF-8')))
+        },
+        "Uniformă" = {
+          withMathJax(HTML(readLines("descrieri/uniforma.html", warn = F, encoding = 'UTF-8')))
+        },
+        "Exponentială" = {
+          withMathJax(HTML(readLines("descrieri/exponentiala.html", warn = F, encoding = 'UTF-8')))
+        },
+        "Gamma" = {
+          withMathJax(HTML(readLines("descrieri/gamma.html", warn = F, encoding = 'UTF-8')))
+        },
+        "Bernoulli" = {
+          withMathJax(HTML(readLines("descrieri/bernoulli.html", warn = F, encoding = 'UTF-8')))
+        },
+        "Binomială" = {
+          withMathJax(HTML(readLines("descrieri/binomiala.html", warn = F, encoding = 'UTF-8')))
+        },
+        "Geometrică" = {
+          withMathJax(HTML(readLines("descrieri/geometrica.html", warn = F, encoding = 'UTF-8')))
+        },
+        "Poisson" = {
+          withMathJax(HTML(readLines("descrieri/poisson.html", warn = F, encoding = 'UTF-8')))
+        },
+    )
   })
 }
 
