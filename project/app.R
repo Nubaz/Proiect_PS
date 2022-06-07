@@ -97,7 +97,7 @@ ui <- fluidPage(
         id = "val_geom",
         
         condition = "input.rep == 'Geometrică'",
-        sliderInput("geom_x", "Număr experimente:", min = 1, max = 10, value = 5),
+        sliderInput("geom_x", "Număr evenimente:", min = 1, max = 10, value = 5),
         numericInput("geom_p", "Prob. succesului", min = 0.1, max = 0.9, value = 0.4, step = 0.1)
       ),
       
@@ -296,44 +296,42 @@ server <- function(input, output, session) {
     
     switch(input$rep,
            "Normală" = {
-              plot(X_n,dnorm(X_n,med,sd),xlab="X",ylab="Probabilitate")
+              plot(X_n,dnorm(X_n,med,sd),xlab="X",ylab="f(x)")
               grid(nx=20,ny=20)
               lines(X_n,dnorm(X_n,med,sd),col="blue",lwd=2)
             },
             "Uniformă" = {
-              plot(X_u,dunif(X_u,a,b),xlab="X",ylab="Probabilitate")
+              plot(X_u,dunif(X_u,a,b),xlab="X",ylab="f(x)")
               grid(nx=20,ny=20)
               lines(0:a-1,dunif(0:a-1,a,b),col="blue",lwd=2)
               lines(a:b,dunif(a:b,a,b),col="blue",lwd=2)
               lines(b+1:max(X_u),dunif(b+1:max(X_u),a,b),col="blue",lwd=2)
             },
            "Exponentială" = {
-             plot(X_exp,dexp(X_exp,lambda),xlab="X",ylab="Probabilitate",type="c")
+             plot(X_exp,dexp(X_exp,lambda),xlab="X",ylab="f(x)",type="c")
              grid(nx=20,ny=20)
              lines(X_exp,dexp(X_exp,lambda),col="blue",lwd=2)
            },
            "Gamma" = {
-             plot(X_gamma,dgamma(X_gamma,k,scale=t),xlab="X",ylab="Probabilitate",type="c")
+             plot(X_gamma,dgamma(X_gamma,k,scale=t),xlab="X",ylab="f(x)",type="c")
              grid(nx=20,ny=20)
              lines(X_gamma,dgamma(X_gamma,k,scale=t),col="blue",lwd=2)
            },
            "Bernoulli" = {
-             plot(c(0,1),dbern(c(0,1),p_b),xlab="X",ylab="Probabilitate",type="h",col="blue")
+             plot(c(0,1),dbern(c(0,1),p_b),xlab="X",ylab="Pr(X=k)",type="h",col="blue",lwd=2)
              grid(nx=20,ny=20)
            },
            "Binomială" = {
-             plot(X_binom,dbinom(X_binom,n,p),xlab="X",ylab="Probabilitate",col="blue")
+             plot(X_binom,dbinom(X_binom,n,p),xlab="X",ylab="Pr(X=k)",col="blue")
              grid(nx=20,ny=20)
            },
            "Geometrică"= {
-             plot(X_g,dgeom(X_g,p_g),xlab="X",ylab="Probabilitate")
+             plot(X_g,dgeom(X_g,p_g),xlab="X",ylab="Pr(X=k+1)",type="h",col="blue",lwd=2)
              grid(nx=20,ny=20)
-             lines(X_g,dgeom(X_g,p_g),col="blue",lwd=2)
            },
            "Poisson" = {
-             plot(X_pois,dpois(X_pois,pois_lambda),xlab="X",ylab="Probabilitate")
+             plot(X_pois,dpois(X_pois,pois_lambda),xlab="X",ylab="Pr(X=k)",type="h",col="blue",lwd=2)
              grid(nx=20,ny=20)
-             lines(X_pois,dpois(X_pois,pois_lambda),col="blue",lwd=2)
            })
   })
   
@@ -377,39 +375,39 @@ server <- function(input, output, session) {
     
     switch(input$rep,
            "Normală" = {
-             plot(X_n,pnorm(X_n,med,sd),xlab="x",ylab="Probabilitate")
+             plot(X_n,pnorm(X_n,med,sd),xlab="x",ylab="F(x)")
              grid(nx=20,ny=20)
              lines(X_n,pnorm(X_n,med,sd),col="red",lwd=2)
            },
            "Uniformă" = {
-             plot(X_u,punif(X_u,a,b),xlab="X",ylab="Probabilitate")
+             plot(X_u,punif(X_u,a,b),xlab="X",ylab="F(x)")
              grid(nx=20,ny=20)
              lines(X_u,punif(X_u,a,b),col="red",lwd=2)
            },
            "Exponentială" = {
-             plot(X_exp,pexp(X_exp,lambda),xlab="X",ylab="Probabilitate",type="c")
+             plot(X_exp,pexp(X_exp,lambda),xlab="X",ylab="F(x)",type="c")
              grid(nx=20,ny=20)
              lines(X_exp,pexp(X_exp,lambda),col="red",lwd=2)
            },
            "Gamma" = {
-             plot(X_gamma,pgamma(X_gamma,k,scale=t),xlab="X",ylab="Probabilitate",type="c")
+             plot(X_gamma,pgamma(X_gamma,k,scale=t),xlab="X",ylab="F(x)",type="c")
              grid(nx=20,ny=20)
              lines(X_gamma,pgamma(X_gamma,k,scale=t),col="red",lwd=2)
            },
            "Bernoulli" = {
-             plot(c(0,1),pbern(c(0,1),p_b),xlab="X",ylab="Probabilitate",type="h",col="red")
+             plot(c(0,1),pbern(c(0,1),p_b),xlab="X",ylab="Pr(X<=k)",type="h",col="red",lwd=2)
              grid(nx=20,ny=20)
            },
            "Binomială" = {
-             plot(X_binom,pbinom(X_binom,n,p),col="red",xlab="X",ylab="Probabilitate")
+             plot(X_binom,pbinom(X_binom,n,p),col="red",xlab="X",ylab="Pr(X<=k)")
              grid(nx=20,ny=20)
            },
            "Geometrică" = {
-             plot(X_g,pgeom(X_g,p_g),col="red",xlab="X",ylab="Probabilitate")
+             plot(X_g,pgeom(X_g,p_g),col="red",xlab="X",ylab="Pr(X<=k)",type="h",lwd=2)
              grid(nx=20,ny=20)
            },
            "Poisson" = {
-             plot(X_pois,ppois(X_pois,pois_lambda),col="red",xlab="X",ylab="Probabilitate")
+             plot(X_pois,ppois(X_pois,pois_lambda),col="red",xlab="X",ylab="Pr(X<=k)",type="h",lwd=2)
              grid(nx=20,ny=20)
            })
   })

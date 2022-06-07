@@ -1,1 +1,14 @@
-geom
+<h2><b><u>Repartiția geometrică</u></b></h2>
+
+<p>Repartiția geometrică este un tip de repartiție discretă de probabilitate pentru variabile aleatoare discrete.</p>
+<p>Implementarea repartiției din aplicație figurează distribuția probabilității numărului de eșecuri pâna la primul succes, în cadrul unui eveniment cu un rezultat boolean.</p>
+<p>Suportul funcției (i.e. intervalul pe care funcția de masă nu se anulează) este, în cazul de față:</p>
+<p>$$k\in\left\{{0,1,2,3,...}\right\}$$</p>
+
+<h4><b>Funcția de masă de probabilitate</b></h4>
+<p>Funcția sa de masă are forma generală:</p>
+<p>$$Pr(X=k+1)=(1-p)^kp=q^kp$$</p>
+
+<h4><b>Funcția de repartiție</b></h4>
+<p>Funcția sa de repartiție are forma generală:</p>
+<p>$$Pr(X \le k+1)=\left\{ \begin{array}{ll} 1-(1-p)^{[x]+1} &\mbox{, } x\ge-1 \\ 0 &\mbox{, } x<0\end{array} \right.$$</p>
