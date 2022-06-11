@@ -2,7 +2,7 @@ library(shinyjs)
 library(Rlab)
 
 cer1_ui <- function(id) {
-  ns <- NS(id)
+  ns <- NS(id) # Desemnarea namespace-ului
   
   tagList(
     titlePanel("Repartiții de variabile aleatoare"),

@@ -1,13 +1,13 @@
 library(shiny)
 library(shinydashboard)
 
-source("cer_1.R")
+eval(parse("cer_1.R", encoding="UTF-8"))
 
 ui <- dashboardPage(
   dashboardHeader(title = "Repartiții de v.a."),
   dashboardSidebar(
     sidebarMenu(
-      menuItem("Cerinta 1", tabName = "cer1")
+      menuItem("Meniu cu repartiții de v.a.", tabName = "cer1")
     )
   ),
   dashboardBody(
