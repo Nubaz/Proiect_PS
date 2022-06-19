@@ -22,6 +22,11 @@ cer11_server <- function(id) {
     
     output$value <- renderPrint({
       name <- file()$name
+      
+      if(is.null(name)) {
+        name <- "date_implicite.csv"
+      }
+      
       # Incarca fisierul csv
       x <- read.csv(name, header = FALSE)
       x <- as.integer(unlist(x))
@@ -30,6 +35,11 @@ cer11_server <- function(id) {
     
     output$data <- renderPlot({
       name <- file()$name
+
+      if(is.null(name)) {
+        name <- "date_implicite.csv"
+      }
+      
       # Incarca fisierul csv
       x <- read.csv(name, header = FALSE)
       x <- as.integer(unlist(x))

@@ -5,7 +5,7 @@ cer12_ui <- function(id) {
     titlePanel("Operații cu v.a. discrete"),
     sidebarLayout(
       sidebarPanel(
-        numericInput(ns("nr_val"), "Număr valori:", value = 4, min = 2, max = 10),
+        numericInput(ns("nr_val"), "Număr valori:", value = 2, min = 2, max = 10),
         actionButton(ns("adunare"), "Adunare"),
         actionButton(ns("scadere"), "Scădere"),
         actionButton(ns("produs"), "Produs"),
@@ -19,8 +19,39 @@ cer12_ui <- function(id) {
         h3("Variabila aleatoare Y"),
         verbatimTextOutput(ns("rv1")),
         
-        h3("Rezultat"),
-        verbatimTextOutput(ns("rv2"))
+        h3(),
+        
+        conditionalPanel(
+          ns = ns,
+          condition = "input.adunare",
+          
+          h3("Adunarea variabilelor aleatoare"),
+          verbatimTextOutput(ns("oper_1"))
+        ),
+        
+        conditionalPanel(
+          ns = ns,
+          condition = "input.scadere",
+          
+          h3("Scaderea variabilelor aleatoare"),
+          verbatimTextOutput(ns("oper_2"))
+        ),
+        
+        conditionalPanel(
+          ns = ns,
+          condition = "input.produs",
+          
+          h3("Produsul variabilelor aleatoare"),
+          verbatimTextOutput(ns("oper_3"))
+        ),
+        
+        conditionalPanel(
+          ns = ns,
+          condition = "input.raport",
+          
+          h3("Raportul variabilelor aleatoare"),
+          verbatimTextOutput(ns("oper_4"))
+        ),
       )
     )
   )
@@ -76,11 +107,39 @@ cer12_server <- function(id) {
     buttonProdus <- reactive(input$produs)
     buttonRaport <- reactive(input$raport)
     
-    tip <- ""
+    # Solutie adaptata de pe site-ul Stack Overflow
+    prod <- function(X, Y) {
+      product.matrix <- t(outer(X[1:length(X)],Y[1:length(Y)],"*"))
+      
+      probX <- c()
+      probY <- c()
+      
+      for(i in 1:length(X)) {
+        probX[i] <- probs(X)[[i]][1]
+      }
+      for(i in 1:length(Y)) {
+        probY[i] <- probs(Y)[[i]][1]
+      }
+      
+      probability.matrix <- t(outer(probX, probY))
+      unique.products <- unique(as.vector(product.matrix))
+      probability.vector <- rep(0, length(unique.products))
+      
+      unique.products <- sort(fractions(unique.products))
+      
+      for(i in 1:length(probability.vector)){
+        z <- unique.products[i]
+        
+        indices <- which(as.vector(product.matrix) == z)
+        
+        probability.vector[i] <- sum(as.vector(probability.matrix)[indices])
+      }
+      
+      XtimesY <- RV(unique.products, probability.vector)
+    }
     
     # Afisarea rezultatului dupa adunare
-    textAdunare <- eventReactive(buttonAdunare(), {
-      tip <- "+"
+    output$oper_1 <- eventReactive(buttonAdunare(), {
       paste(collapse = "\n",
             capture.output(
               fractions(probs(vals$dRV + vals2$dRV))
@@ -89,8 +148,7 @@ cer12_server <- function(id) {
     })
     
     # Afisarea rezultatului dupa scadere
-    textScadere <- eventReactive(buttonScadere(), {
-      tip <- "-"
+    output$oper_2 <- eventReactive(buttonScadere(), {
       paste(collapse = "\n",
             capture.output(
               fractions(probs(vals$dRV - vals2$dRV))
@@ -99,27 +157,21 @@ cer12_server <- function(id) {
     })
     
     # Afisarea rezultatului dupa produs
-    textProdus <- eventReactive(buttonProdus(), {
-      tip <- "*"
+    output$oper_3 <- eventReactive(buttonProdus(), {
       paste(collapse = "\n",
             capture.output(
-              fractions(probs(vals$dRV * vals2$dRV))
+              fractions(probs(prod(vals$dRV, vals2$dRV)))
             )
       )
     })
     
     # Afisarea rezultatului dupa raport
-    textRaport <- eventReactive(buttonRaport(), {
-      tip <- "/"
+    output$oper_4 <- eventReactive(buttonRaport(), {
       paste(collapse = "\n",
             capture.output(
-              fractions(probs(vals$dRV * (vals2$dRV)^-1))
+              fractions(probs(prod(vals$dRV, (vals2$dRV)^-1)))
             )
       )
-    })
-    
-    output$rv2 <- renderText({
-      textAdunare()
     })
   })
 }
