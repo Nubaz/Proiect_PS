@@ -461,7 +461,7 @@ cer1_server <- function(id) {
              },
              "Poisson" = {
                withMathJax(HTML(readLines("descrieri/poisson.html", warn = F, encoding = 'UTF-8')))
-             },
+             }
       )
     })
   })
